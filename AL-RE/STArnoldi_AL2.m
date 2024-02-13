@@ -47,16 +47,12 @@ function [X1,X2]= STArnoldi_AL2(A, B, C1, C2, SU, SV, k, maxit, tol, p)
         V = [V,Vdp1];
         
 
-        
-        %Update QRs
-        [~,Tudp1] = qr(SU*U,0);
-        [~,Tvdp1] =qr(SV*V,0);
 
         
         %Update Hd and Gd
         Hd = HGd_AL2(A,U,d,r,n1);
         Gd = HGd_AL2(B',V,d,r,n2);
-        %Updatd Hd first
+        
          
          Ed = [zeros((d-1)*r,r);eye(r)];
          E1 = [eye(r);zeros((d-1)*r,r)];
