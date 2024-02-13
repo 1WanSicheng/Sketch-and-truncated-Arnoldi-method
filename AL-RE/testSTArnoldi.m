@@ -1,6 +1,6 @@
-n1 =1200;
-n2 = 900;
-s=300;
+n1 =120;
+n2 = 120;
+s=20;
 r = 2;
 rng("default");
 SU = generateSketchingMatrix(n1,s);
@@ -14,24 +14,29 @@ C2 = rand(n2,r);
  
 C = C1*C2';
 
-X_lyap = lyap(A,B,-C);
+%X_lyap = lyap(A,B,-C);
 
 
 
 
 
-k=1;
-maxit =100;
-tol = 1e-8;
-p=1;
-[X1,X2] = STArnoldi_computation(A, B, C1, C2, SU, SV, k, maxit, tol, p);
+k=2;
+maxit =10;
+for i = 6:10
+    tol = 10^(-i);
+    p=10;
+    [X1,X2] = STArnoldi_computation(A, B, C1, C2, SU, SV, k, maxit, tol, p);
 
-Xd = X1*X2';
+    Xd = X1*X2';
+    disp (['tol:', num2str(tol)]);
 
-error2 = norm(Xd-X_lyap, 'fro')/norm(X_lyap,'fro');
-errorr = norm(A*Xd+Xd*B-C1*C2','fro')/norm(C1*C2','fro');
-disp(['Approximation error X_d - X: ', num2str(error2)]);
-disp(['residue: ', num2str(errorr)]);
+   % error2 = norm(Xd-X_lyap, 'fro')/norm(X_lyap,'fro');
+    errorr = norm(A*Xd+Xd*B-C1*C2','fro')/norm(C1*C2','fro');
+    %disp(['Approximation error X_d - X: ', num2str(error2)]);
+    disp(['residue: ', num2str(errorr)]);
+    
+end
+
 
 
 

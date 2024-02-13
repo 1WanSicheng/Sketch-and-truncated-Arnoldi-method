@@ -84,7 +84,7 @@ function [X1,X2] = STArnoldi(A, B, C1, C2, SU, SV, k, maxit, tol, p)
              Y = lyap(AA,BB,C);
              
              rho = sqrt(norm(hdp1d*Ed' * Y, 'fro')^2 + norm(Y *Ed*gdp1d', 'fro')^2);
-             disp(rho);
+             %disp(rho);
              if rho < tol
                  break;
              end

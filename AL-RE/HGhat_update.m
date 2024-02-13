@@ -1,4 +1,4 @@
-function Hdp1hat = HGhat_update(A,U,hdp1d,Hdhat,THdp1,Tudp1,tow_d,d,r)
+function Hdp1hat = HGhat_updatev2(A,U,hdp1d,Hdhat,THdp1,Tudp1,tow_d,d,r)
     Ed = [zeros((d-1)*r,r);eye(r)];
     
     
@@ -17,15 +17,15 @@ function Hdp1hat = HGhat_update(A,U,hdp1d,Hdhat,THdp1,Tudp1,tow_d,d,r)
     hdp1dp1 = Udp1'*Utildenew;
     Tud = Tudp1(1:d*r,1:d*r);
     
-    LT = Hdhat - THdp1*hdp1d/tow_d*Ed';
+    LT = Hdhat + THdp1*hdp1d/tow_d*Ed';
    
    
-    Hhatnew = LT*THdp1/tow_dp1+ Tud*H'/tow_dp1+THdp1*hdp1dp1/tow_dp1;
+    Hhatnew = -LT*THdp1/tow_dp1+ Tud*H'/tow_dp1+THdp1*hdp1dp1/tow_dp1;
     LD = tow_dp1*hdp1d/tow_d*Ed';
-    RD = tow_dp1*(hdp1d/tow_d*Ed'*THdp1+hdp1dp1)/tow_dp1;
+    RD = tow_dp1*(-hdp1d/tow_d*Ed'*THdp1+hdp1dp1)/tow_dp1;
     
-    Hdp1hat = [LT,-Hhatnew;
-        -LD,-RD];
+    Hdp1hat = [LT,Hhatnew;
+        LD,RD];
     
     
     
