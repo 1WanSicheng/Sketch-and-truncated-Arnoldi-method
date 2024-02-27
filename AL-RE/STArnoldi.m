@@ -1,7 +1,8 @@
 function [X1,X2] = STArnoldi(A, B, C1, C2, SU, SV, k, maxit, tol, p)
-
+    %this AL is algorithm1 in paper, we update Hdhat instead of direct-
+    %computation
     %Initialization
-    %Compute skinny QRs:
+    
     n1 =size(C1,1);
     n2 =size(C2,1);
     r = size(C1,2);
@@ -13,7 +14,7 @@ function [X1,X2] = STArnoldi(A, B, C1, C2, SU, SV, k, maxit, tol, p)
     Tv1 = beta2;
     U=[U1];
     V=[V1];
-    %intialize Hd hat and Gd hat
+    %intialize Hd hat and Gd hat Hdhat = Tud*H*inv(Tud)
    Hdhat = Tu1*U1'*A*U1/Tu1;
    Gdhat = Tv1*V1'*B'*V1/Tv1;
     for d=1:maxit
@@ -41,6 +42,8 @@ function [X1,X2] = STArnoldi(A, B, C1, C2, SU, SV, k, maxit, tol, p)
         %Compute skinny QRs of Utilde and Vtilde
         [Udp1,hdp1d] = qr(Utilde,0);
         [Vdp1,gdp1d] = qr(Vtilde,0);
+        
+        %U,V here store all Ui's and Vi's here
         U = [U,Udp1];
         V = [V,Vdp1];
         
@@ -67,13 +70,21 @@ function [X1,X2] = STArnoldi(A, B, C1, C2, SU, SV, k, maxit, tol, p)
          Ghat = TGdp1*(gdp1d/theta_d);
          
          %At d iteration, we could get hat H_d+1 and hatG_d+1
-         Hdp1hat =  HGhat_update(A,U,hdp1d,Hdhat,THdp1,Tudp1,tow_d,d,r);
-         Gdp1hat =  HGhat_update(B',V,gdp1d,Gdhat,TGdp1,Tvdp1,theta_d,d,r);
+         %Here, we could update the d+1th Hhat and Ghat
+         %Hdp1hat =  HGhat_update(A,U,hdp1d,Hdhat,THdp1,Tudp1,tow_d,d,r);
+         %Gdp1hat =  HGhat_update(B',V,gdp1d,Gdhat,TGdp1,Tvdp1,theta_d,d,r);
+         
+         
          
          
          
          Ed = [zeros((d-1)*r,r);eye(r)];
          E1 = [eye(r);zeros((d-1)*r,r)];
+         Udhat = U(:,1:d*r)/Tud;
+         Vdhat = V(:,1:d*r)/Tvd;
+         Hdhat = Udhat'*(SU')*SU*A*Udhat-Hhat*Ed';
+         Gdhat = Vdhat'*(SV')*SV*B'*Vdhat-Ghat*Ed';
+         
          
          
          if mod(d,p) == 0 
@@ -89,8 +100,8 @@ function [X1,X2] = STArnoldi(A, B, C1, C2, SU, SV, k, maxit, tol, p)
                  break;
              end
          end
-         Hdhat = Hdp1hat;
-         Gdhat = Gdp1hat;
+         %Hdhat = Hdp1hat;
+         %Gdhat = Gdp1hat;
          
     end
     

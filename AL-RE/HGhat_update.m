@@ -1,4 +1,4 @@
-function Hdp1hat = HGhat_updatev2(A,U,hdp1d,Hdhat,THdp1,Tudp1,tow_d,d,r)
+function Hdp1hat = HGhat_update(A,U,hdp1d,Hdhat,THdp1,Tudp1,tow_d,d,r)
     Ed = [zeros((d-1)*r,r);eye(r)];
     
     
@@ -17,6 +17,8 @@ function Hdp1hat = HGhat_updatev2(A,U,hdp1d,Hdhat,THdp1,Tudp1,tow_d,d,r)
     hdp1dp1 = Udp1'*Utildenew;
     Tud = Tudp1(1:d*r,1:d*r);
     
+    %LT means the left top enties in Hd+1 hat
+    %LD,RD are the left down and right down, respectively
     LT = Hdhat + THdp1*hdp1d/tow_d*Ed';
    
    
